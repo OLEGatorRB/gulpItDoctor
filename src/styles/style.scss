@@ -1,0 +1,14 @@
+body{
+	color: red;
+
+	p {
+		background: blue;
+		&:hover{
+			text-decoration: none;
+		}
+	}
+	a{ 
+		color: aqua;
+		text-decoration: underline;
+	}
+}
