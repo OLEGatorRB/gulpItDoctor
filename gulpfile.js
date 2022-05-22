@@ -32,5 +32,14 @@ function styles() {
 		.pipe(gulp.dest(paths.styles.dest))
 }
 
+function watch() {
+	gulp.watch(paths.styles.src, styles)
+}
+
+const build = gulp.series(clean, styles, watch);
+
 exports.clean = clean
 exports.styles = styles;
+exports.watch = watch;
+exports.build = build;
+exports.default = build;
