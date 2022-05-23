@@ -11,6 +11,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const htmlmin = require('gulp-htmlmin');
 const newer = require('gulp-newer');
+const browserSync = require('browser-sync').create();
 const del = require('del');
 const size = require('gulp-size');
 const { src } = require('gulp');
@@ -31,7 +32,7 @@ const paths = {
 		dest: 'dist/js'
 	},
 	images: {
-		src: 'src/img/*',
+		src: 'src/img/**',
 		dest: 'dist/img'
 	}
 };
@@ -48,7 +49,8 @@ function html() {
 		.pipe(size({
 			showFiles: true
 		}))
-    .pipe(gulp.dest(paths.html.dest));
+    .pipe(gulp.dest(paths.html.dest))
+		.pipe(browserSync.stream());
 }
 
 //задача длдя обработки стилей
@@ -72,6 +74,7 @@ function styles() {
 			showFiles: true
 		}))
 		.pipe(gulp.dest(paths.styles.dest))
+		.pipe(browserSync.stream());
 }
 
 //задача длдя обработки скриптов
@@ -88,6 +91,7 @@ function scripts() {
 			showFiles: true
 		}))
 		.pipe(gulp.dest(paths.scripts.dest))
+		.pipe(browserSync.stream());	
 }
 
 function img() {
@@ -102,8 +106,17 @@ function img() {
 
 //задача для отслеживания изменений в стилях
 function watch() {
-	gulp.watch(paths.styles.src, styles)
-	gulp.watch(paths.scripts.src, scripts)
+	browserSync.init({
+		server: {
+				baseDir: "./dist/"
+		}
+	});
+	gulp.watch(paths.html.dest).on('change', browserSync.reload);
+	gulp.watch(paths.html.src, html);
+	gulp.watch(paths.styles.src, styles);
+	gulp.watch(paths.scripts.src, scripts);
+	gulp.watch(paths.images.src, img);
+
 }
 
 const build = gulp.series(clean, html, gulp.parallel(styles, scripts, img), watch);
