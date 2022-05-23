@@ -31,5 +31,8 @@
     "gulp-sourcemaps": "^3.0.0",
     "gulp-uglify": "^3.0.2",
     "sass": "^1.52.1"
+  },
+  "dependencies": {
+    "gulp-imagemin": "^7.1.0"
   }
 }
